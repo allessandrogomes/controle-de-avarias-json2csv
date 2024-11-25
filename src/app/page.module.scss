@@ -1,0 +1,33 @@
+.main {
+  width: 100%;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  .form {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    max-width: 300px;
+    text-transform: uppercase;
+
+    input {
+      text-transform: uppercase;
+    }
+
+    div {
+      display: flex;
+      flex-direction: column;
+
+    }
+
+    button {
+      width: 100px;
+      align-self: center;
+    }
+  }
+
+  h2 {
+    text-align: center;
+  }
+}
