@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import styles from "./page.module.scss"
-import { Parser } from "json2csv";
+import { parse } from "json2csv";
 import "normalize.css";
 
 export default function Home() {
@@ -11,14 +11,6 @@ export default function Home() {
   const [code, setCode] = useState("")
   const [desc, setDesc] = useState("")
   const [qtd, setQtd] = useState("")
-
-  const options = {
-    delimiter: {
-      field: ';'
-    }
-  }
-
-  const parser = new Parser(options)
 
   function addBreakdown(code, desc, qtd, event) {
     event.preventDefault()
@@ -37,7 +29,7 @@ export default function Home() {
 
   function downloadCsv() {
     try {
-      const csv = parser.parse(breakdowns)
+      const csv = parse(breakdowns)
       const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' })
       const url = window.URL.createObjectURL(blob)
       const link = document.createElement('a')
