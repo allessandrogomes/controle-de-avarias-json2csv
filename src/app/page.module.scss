@@ -1,11 +1,23 @@
+$primary-color: #282C69;
+$secondary-color: #FFFFFF;
+$tertiary-color: #E52E31;
+
 .main {
   width: 100%;
-  height: 100vh;
   display: flex;
   flex-direction: column;
   align-items: center;
   font-family: Roboto, sans-serif;
+
+  .logo {
+    width: 200px;
+    margin-top: 30px;
+  }
+
   .form {
+    border: 2px solid black;
+    padding: 50px;
+    box-sizing: border-box;
     display: flex;
     flex-direction: column;
     gap: 20px;
@@ -29,13 +41,60 @@
       align-self: center;
       border: 2px solid black;
       padding: 10px;
-      background-color: #00FF9C;
-      color: #000000;
+      background-color: $primary-color;
+      color: $secondary-color;
       font-weight: bold;
     }
   }
 
-  h2 {
-    text-align: center;
+  .breakdowns {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    border: 2px solid black;
+    padding: 20px;
+    margin: 25px 10px;
+    box-sizing: border-box;
+
+    h2 {
+      text-align: center;
+    }
+
+    div {
+      width: 100%;
+    }
+
+    .breakdownItem {
+      background-color: $primary-color;
+      color: $secondary-color;
+      text-align: center;
+      border: 1px solid black;
+      padding: 5px;
+      font-weight: bold;
+    }
+
+    .downloadCsv {
+      background-color: $tertiary-color;
+      color: $secondary-color;
+      border: none;
+      padding: 10px;
+
+      &:disabled {
+        background-color: gray;
+      }
+    }
+  }
+}
+
+.credits {
+  text-align: center;
+  font-family:'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+  margin-bottom: 25px;
+
+  a {
+    color: $primary-color;
+    font-weight: bold;
+    text-decoration: underline;
+    cursor: pointer;
   }
 }
