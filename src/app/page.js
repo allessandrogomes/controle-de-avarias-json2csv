@@ -1,26 +1,42 @@
 'use client'
 
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import styles from "./page.module.scss"
 import { Parser } from "@json2csv/plainjs"
 import "normalize.css"
 import Image from "next/image"
-import { IoMdDownload } from "react-icons/io"
 import { v4 as uuidv4 } from 'uuid'
 import InputField from "@/components/InputField"
 import BreakdownBox from "@/components/BreakdownBox"
 import ModalConfirmDelete from "@/components/ModalConfirmDelete"
+import DefaultButton from "@/components/DefaultButton"
+import { IoMdDownload } from "react-icons/io"
+import { MdCleaningServices } from "react-icons/md"
 
 export default function Home() {
 
-  const [breakdowns, setBreakdowns] = useState([])
-  const [openModal, setOpenModal] = useState(false)
+  const [breakdowns, setBreakdowns] = useState(() => {
+    if (window !== "undefined") {
+      const storedData = localStorage.getItem("breakdowns")
+      return storedData ? JSON.parse(storedData) : []
+    }
+    return []
+  })
+  const [openModalDeleteItem, setOpenModalDeleteItem] = useState(false)
+  const [openModalDeleteAll, setOpenModalDeleteAll] = useState(false)
   const [code, setCode] = useState("")
   const [desc, setDesc] = useState("")
   const [qtd, setQtd] = useState("")
   const [selectedItem, setSelectedItem] = useState()
   const opts = { delimiter: ";" }
   const parser = new Parser(opts)
+
+  // Ao montar e/ou atualizar o estado 'breakdowns', atualiza o localstorage
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      localStorage.setItem("breakdowns", JSON.stringify(breakdowns))
+    }
+  }, [breakdowns])
 
   function addBreakdown(code, desc, qtd, event) {
     event.preventDefault()
@@ -36,6 +52,17 @@ export default function Home() {
     setCode("")
     setDesc("")
     setQtd("")
+  }
+
+  function deleteModalAskItem(item) {
+    setSelectedItem(item)
+    setOpenModalDeleteItem(true)
+  }
+
+  function removeBreakdown(id) {
+    const filteredBreakdowns = breakdowns.filter(item => item.id !== id)
+    setBreakdowns(filteredBreakdowns)
+    setOpenModalDeleteItem(false)
   }
 
   function downloadCsv() {
@@ -54,15 +81,9 @@ export default function Home() {
     }
   }
 
-  function deleteModalAsk(item) {
-    setSelectedItem(item)
-    setOpenModal(true)
-  }
-
-  function removeBreakdown(id) {
-    const filteredBreakdowns = breakdowns.filter(item => item.id !== id)
-    setBreakdowns(filteredBreakdowns)
-    setOpenModal(false)
+  function cleanList() {
+    setBreakdowns([])
+    setOpenModalDeleteAll(false)
   }
 
   return (
@@ -95,7 +116,7 @@ export default function Home() {
             {breakdowns.length ?
               breakdowns.map(item => (
                 <BreakdownBox
-                  onCloseModal={() => deleteModalAsk(item)}
+                  onCloseModal={() => deleteModalAskItem(item)}
                   code={item.codigo}
                   desc={item.descricao}
                   qtd={item.quantidade}
@@ -106,22 +127,44 @@ export default function Home() {
             }
           </div>
 
-          <button className={styles.downloadCsv} disabled={!breakdowns.length} onClick={downloadCsv}>Baixar CSV <IoMdDownload style={{ position: "relative", top: "3px" }} /></button>
+          <DefaultButton
+            text="Baixar CSV"
+            bgColor="#006A67"
+            icon={<IoMdDownload style={{ position: "relative", top: "3px" }} />}
+            disabled={!breakdowns.length}
+            onClick={downloadCsv}
+          />
+
+          <DefaultButton
+            text="Limpar lista"
+            bgColor="#E52E31"
+            icon={<MdCleaningServices style={{ position: "relative", top: "1px" }} />}
+            disabled={!breakdowns.length}
+            onClick={() => setOpenModalDeleteAll(true)}
+          />
         </div>
 
         {/* Modal de confirmação será exibida ao solicitar para excluir um item. */}
-        {openModal ?
+        {openModalDeleteItem ?
           <ModalConfirmDelete
-            code={selectedItem.codigo}
-            desc={selectedItem.descricao}
-            qtd={selectedItem.quantidade}
-            cancelBtn={() => setOpenModal(false)}
+            actionText={`Tem certeza que deseja excluir o item <span>${selectedItem.codigo} | ${selectedItem.descricao} | ${selectedItem.quantidade}</span>?`}
+            cancelBtn={() => setOpenModalDeleteItem(false)}
             confirmBtn={() => removeBreakdown(selectedItem.id)}
           /> :
           ""
         }
+        
+        {/* Modal de confirmação para limpeza de todos os itens */}
+        {openModalDeleteAll ?
+          <ModalConfirmDelete
+            actionText="Deseja realmente excluir todos os itens?"
+            cancelBtn={() => setOpenModalDeleteAll(false)}
+            confirmBtn={cleanList}
+          /> :
+          ""
+        }
       </main>
-      
+
       <footer className={styles.credits}>Desenvolvido por <a href="https://github.com/allessandrogomes" target="_blank">Alessandro Gomes</a></footer>
     </>
   );

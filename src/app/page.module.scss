@@ -35,6 +35,7 @@ $tertiary-color: #E52E31;
       background-color: $primary-color;
       color: $secondary-color;
       font-weight: normal;
+      cursor: pointer;
       box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
     }
   }
@@ -48,6 +49,7 @@ $tertiary-color: #E52E31;
     box-sizing: border-box;
     box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
     gap: 30px;
+    width: 360px;
 
     h2 {
       text-align: center;
@@ -58,18 +60,6 @@ $tertiary-color: #E52E31;
       display: flex;
       flex-direction: column;
       gap: 10px;
-    }
-
-    .downloadCsv {
-      background-color: $tertiary-color;
-      color: $secondary-color;
-      border: none;
-      padding: 10px;
-      box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
-
-      &:disabled {
-        background-color: gray;
-      }
     }
   }
 }
