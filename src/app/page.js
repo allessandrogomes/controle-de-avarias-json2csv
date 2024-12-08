@@ -16,7 +16,7 @@ import { MdCleaningServices } from "react-icons/md"
 export default function Home() {
 
   const [breakdowns, setBreakdowns] = useState(() => {
-    if (window !== "undefined") {
+    if (typeof window !== "undefined") {
       const storedData = localStorage.getItem("breakdowns")
       return storedData ? JSON.parse(storedData) : []
     }
