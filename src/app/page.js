@@ -16,11 +16,8 @@ import { MdCleaningServices } from "react-icons/md"
 export default function Home() {
 
   const [breakdowns, setBreakdowns] = useState(() => {
-    if (typeof window !== "undefined") {
-      const storedData = localStorage.getItem("breakdowns")
-      return storedData ? JSON.parse(storedData) : []
-    }
-    return []
+    const storedData = localStorage.getItem("breakdowns")
+    return storedData ? JSON.parse(storedData) : []
   })
   const [openModalDeleteItem, setOpenModalDeleteItem] = useState(false)
   const [openModalDeleteAll, setOpenModalDeleteAll] = useState(false)
@@ -33,9 +30,7 @@ export default function Home() {
 
   // Ao montar e/ou atualizar o estado 'breakdowns', atualiza o localstorage
   useEffect(() => {
-    if (typeof window !== "undefined") {
-      localStorage.setItem("breakdowns", JSON.stringify(breakdowns))
-    }
+    localStorage.setItem("breakdowns", JSON.stringify(breakdowns))
   }, [breakdowns])
 
   function addBreakdown(code, desc, qtd, event) {
@@ -67,7 +62,8 @@ export default function Home() {
 
   function downloadCsv() {
     try {
-      const csv = parser.parse(breakdowns)
+      const breakdownsWithoutId = breakdowns.map(({ id, ...rest }) => rest)
+      const csv = parser.parse(breakdownsWithoutId)
       const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' })
       const url = window.URL.createObjectURL(blob)
       const link = document.createElement('a')
@@ -153,7 +149,7 @@ export default function Home() {
           /> :
           ""
         }
-        
+
         {/* Modal de confirmação para limpeza de todos os itens */}
         {openModalDeleteAll ?
           <ModalConfirmDelete
