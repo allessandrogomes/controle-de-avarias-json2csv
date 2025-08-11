@@ -103,7 +103,7 @@ export default function Home() {
         <form className={styles.form} onSubmit={(event) => addBreakdown(code, desc, qtd, event)}>
           <InputField fieldName="Código" fieldType="number" onChange={(event) => setCode(event.target.value)} fieldValue={code} />
           {/* <InputField fieldName="Descrição" fieldType="text" onChange={(event) => setDesc(event.target.value)} fieldValue={desc} /> */}
-          <InputField fieldName="Quantidade" fieldType="text" onChange={(event) => setQtd(event.target.value)} fieldValue={qtd} />
+          <InputField fieldName="Quantidade" fieldType="number" onChange={(event) => setQtd(event.target.value)} fieldValue={qtd} />
 
           <button type="submit">Adicionar</button>
         </form>
