@@ -16,7 +16,7 @@ import { MdCleaningServices } from "react-icons/md"
 export default function Home() {
 
   const [breakdowns, setBreakdowns] = useState(() => {
-    const storedData = localStorage.getItem("breakdowns")
+    const storedData = localStorage.getItem("breakdowns") | null
     return storedData ? JSON.parse(storedData) : []
   })
   const [openModalDeleteItem, setOpenModalDeleteItem] = useState(false)
